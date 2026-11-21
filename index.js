@@ -15,7 +15,7 @@ class HashMap {
   }
   set(key, value) {
     let index = this.hash(key);
-    if (index < 0 || index > this.buckets.length)
+    if (index < 0 || index >= this.buckets.length)
       throw new Error("Trying to access index out of bounds");
     if (this.buckets[index] == null) this.buckets[index] = new Node(key, value);
     else {
@@ -32,6 +32,43 @@ class HashMap {
         current = current.next;
       }
     }
+  }
+  get(key) {
+    let index = this.hash(key);
+    if (index < 0 || index >= this.buckets.length)
+      throw new Error("Trying to access index out of bounds");
+    let current = this.buckets[index];
+    while (current) {
+      if (current.key === key) {
+        return current.value;
+      }
+      current = current.next;
+    }
+    return null;
+  }
+  has(key) {
+    return this.get(key) !== null;
+  }
+  remove(key) {
+    let index = this.hash(key);
+    if (index < 0 || index >= this.buckets.length)
+      throw new Error("Trying to access index out of bounds");
+    if (this.buckets[index] === null) return false;
+    if (this.buckets[index].key === key) {
+      this.buckets[index] = this.buckets[index].next;
+      return true;
+    }
+    let previous = this.buckets[index];
+    let current = previous.next;
+    while (current) {
+      if (current.key === key) {
+        previous.next = current.next;
+        return true;
+      }
+      previous = current;
+      current = current.next;
+    }
+    return false
   }
 }
 class Node {
