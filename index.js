@@ -27,11 +27,12 @@ class HashMap {
         }
         if (current.next == null) {
           current.next = new Node(key, value);
-          return null;
+          break;
         }
         current = current.next;
       }
     }
+    if (this.length() > this.capacity * this.loadFactor) this.resize();
   }
   get(key) {
     let index = this.hash(key);
@@ -90,7 +91,7 @@ class HashMap {
       let current = bucket;
       while (current) {
         keysArray.push(current.key);
-        current=current.next
+        current = current.next;
       }
     }
     return keysArray;
@@ -101,7 +102,7 @@ class HashMap {
       let current = bucket;
       while (current) {
         valuesArray.push(current.value);
-        current=current.next
+        current = current.next;
       }
     }
     return valuesArray;
@@ -112,10 +113,18 @@ class HashMap {
       let current = bucket;
       while (current) {
         entriesArray.push([current.key, current.value]);
-        current=current.next
+        current = current.next;
       }
     }
     return entriesArray;
+  }
+  resize() {
+    const oldEntries = this.entries();
+    this.capacity *= 2;
+    this.buckets = new Array(this.capacity).fill(null);
+    for (const [key, value] of oldEntries) {
+      this.set(key, value);
+    }
   }
 }
 class Node {
