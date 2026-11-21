@@ -68,7 +68,54 @@ class HashMap {
       previous = current;
       current = current.next;
     }
-    return false
+    return false;
+  }
+  length() {
+    let count = 0;
+    for (const bucket of this.buckets) {
+      let current = bucket;
+      while (current) {
+        count++;
+        current = current.next;
+      }
+    }
+    return count;
+  }
+  clear() {
+    this.buckets = new Array(this.capacity).fill(null);
+  }
+  keys() {
+    let keysArray = [];
+    for (const bucket of this.buckets) {
+      let current = bucket;
+      while (current) {
+        keysArray.push(current.key);
+        current=current.next
+      }
+    }
+    return keysArray;
+  }
+  values() {
+    let valuesArray = [];
+    for (const bucket of this.buckets) {
+      let current = bucket;
+      while (current) {
+        valuesArray.push(current.value);
+        current=current.next
+      }
+    }
+    return valuesArray;
+  }
+  entries() {
+    let entriesArray = [];
+    for (const bucket of this.buckets) {
+      let current = bucket;
+      while (current) {
+        entriesArray.push([current.key, current.value]);
+        current=current.next
+      }
+    }
+    return entriesArray;
   }
 }
 class Node {
